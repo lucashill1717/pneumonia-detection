@@ -33,7 +33,6 @@ model.compile(
 
 model.fit(
     x=training_data,
-    batch_size=32,
     epochs=50,
     verbose=2,
 )
@@ -48,4 +47,4 @@ validation_data = image_dataset_from_directory(
     label_mode="categorical",
 )
 
-print(model.predict(validation_data, batch_size=32))
+print(model.predict(validation_data))
