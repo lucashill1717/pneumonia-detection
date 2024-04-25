@@ -34,6 +34,18 @@ model.compile(
 model.fit(
     x=training_data,
     batch_size=32,
-    epochs=20,
+    epochs=50,
     verbose=2,
 )
+
+model.save("model0.keras")
+
+validation_data = image_dataset_from_directory(
+    directory="data/val",
+    image_size=(DIMENSION, DIMENSION),
+    color_mode="grayscale",
+    interpolation="gaussian",
+    label_mode="categorical",
+)
+
+print(model.predict(validation_data, batch_size=32))
