@@ -1,4 +1,3 @@
-import tensorflow as tf
 from keras.preprocessing import image_dataset_from_directory
 from keras.models import Sequential
 from keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense
@@ -7,14 +6,15 @@ DIMENSION = 256
 
 training_data = image_dataset_from_directory(
     directory="data/train",
-    image_size=(DIMENSION, DIMENSION),
+    image_size=(256, 256),
     color_mode="grayscale",
     interpolation="gaussian",
     label_mode="categorical",
+    verbose=False,
 )
 
 model = Sequential(
-    layers=(
+    layers=[
         Input(shape=(DIMENSION, DIMENSION, 1)),
         Conv2D(64, 3, activation="relu"),
         Conv2D(64, 3, activation="relu"),
@@ -24,7 +24,7 @@ model = Sequential(
         MaxPooling2D(),
         Flatten(),
         Dense(3, activation="softmax"),
-    )
+    ]
 )
 
 model.compile(
@@ -34,17 +34,6 @@ model.compile(
 model.fit(
     x=training_data,
     epochs=50,
-    verbose=2,
 )
 
 model.save("model0.keras")
-
-validation_data = image_dataset_from_directory(
-    directory="data/val",
-    image_size=(DIMENSION, DIMENSION),
-    color_mode="grayscale",
-    interpolation="gaussian",
-    label_mode="categorical",
-)
-
-print(model.predict(validation_data))
