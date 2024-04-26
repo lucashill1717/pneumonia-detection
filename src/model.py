@@ -1,12 +1,10 @@
 from keras.preprocessing import image_dataset_from_directory
 from keras.models import Sequential
-from keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense
-
-DIMENSION = 256
+from keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense, Dropout
 
 training_data = image_dataset_from_directory(
     directory="data/train",
-    image_size=(256, 256),
+    image_size=(384, 384),
     color_mode="grayscale",
     interpolation="gaussian",
     label_mode="categorical",
@@ -15,12 +13,14 @@ training_data = image_dataset_from_directory(
 
 model = Sequential(
     layers=[
-        Input(shape=(DIMENSION, DIMENSION, 1)),
-        Conv2D(64, 3, activation="relu"),
-        Conv2D(64, 3, activation="relu"),
+        Input(shape=(384, 384, 1)),
+        Conv2D(128, 5, activation="relu"),
+        Conv2D(128, 3, activation="relu"),
+        Dropout(rate=0.1),
         MaxPooling2D(),
-        Conv2D(128, 3, activation="silu"),
-        Conv2D(128, 3, activation="silu"),
+        Conv2D(256, 5, activation="relu"),
+        Conv2D(256, 3, activation="relu"),
+        Dropout(rate=0.1),
         MaxPooling2D(),
         Flatten(),
         Dense(3, activation="softmax"),
@@ -33,7 +33,7 @@ model.compile(
 
 model.fit(
     x=training_data,
-    epochs=50,
+    epochs=100,
 )
 
 model.save("model0.keras")
