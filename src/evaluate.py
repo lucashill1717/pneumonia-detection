@@ -12,5 +12,4 @@ validation_data = image_dataset_from_directory(
     verbose=False,
 )
 
-loss, accuracy = model.evaluate(validation_data) # type: ignore
-print("Validation Accuracy:", accuracy)
+model.evaluate(validation_data) # type: ignore
