@@ -1,6 +1,7 @@
 from keras.preprocessing import image_dataset_from_directory
 from keras.models import Sequential
 from keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense, Dropout
+from dataset import PneumoniaDataset
 
 
 training_data = image_dataset_from_directory(
