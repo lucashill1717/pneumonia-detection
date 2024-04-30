@@ -4,8 +4,9 @@ from skimage.io import imread
 from skimage.transform import resize
 import numpy as np
 
-def _get_image_paths(dir):
-    pass
+def _get_image_paths(dir: str) -> tuple[list[str], list[list]]:
+    paths, classes = [], []
+    return paths, classes
 
 class PneumoniaDataset(PyDataset):
     """
@@ -13,15 +14,15 @@ class PneumoniaDataset(PyDataset):
     Utilizes a Keras PyDataset class, allowing a generator
     to be used to avoid memory issues.
     """
-    def __init__(self, x, y, batch_size, **kwargs):
+    def __init__(self, dir: str, batch_size: int, **kwargs):
         super().__init__(**kwargs)
-        self.x, self.y = x, y
+        self.x, self.y = _get_image_paths(dir)
         self.batch_size = batch_size
 
-    def __len__(self):
+    def __len__(self) -> int:
         return ceil(len(self.x) / self.batch_size)
 
-    def __getitem__(self, idx):
+    def __getitem__(self, idx: int):
         low = idx * self.batch_size
         high = min(low + self.batch_size, len(self.x))
         batch_x = self.x[low:high]
