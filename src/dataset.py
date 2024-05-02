@@ -4,10 +4,13 @@ from math import ceil
 from skimage.io import imread
 from skimage.transform import resize
 from numpy import array, ndarray
+from os import listdir
 
 
-def _get_image_paths(dir: str) -> tuple[list[str], list[list]]:
+def get_image_paths(dir: str) -> tuple[list[str], list[list]]:
     paths, classes = [], []
+    paths.extend(listdir(f"{dir}/NORMAL"))
+    classes.extend([[1,0,0] for _ in range(len(paths))])
     return paths, classes
 
 
@@ -21,7 +24,7 @@ class PneumoniaDataset(PyDataset):
         self: "PneumoniaDataset", dir: str, batch_size: int, **kwargs: Any
     ) -> None:
         super().__init__(**kwargs)
-        self.x, self.y = _get_image_paths(dir)
+        self.x, self.y = get_image_paths(dir)
         self.batch_size = batch_size
 
     def __len__(self: "PneumoniaDataset") -> int:
