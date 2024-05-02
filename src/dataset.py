@@ -7,10 +7,15 @@ from numpy import array, ndarray
 from os import listdir
 
 
-def get_image_paths(dir: str) -> tuple[list[str], list[list]]:
+def get_image_paths(dir: str) -> tuple[list[str], list[list[int]]]:
     paths, classes = [], []
-    paths.extend(listdir(f"{dir}/NORMAL"))
-    classes.extend([[1,0,0] for _ in range(len(paths))])
+    class_labels = {"NORMAL": [1, 0, 0], "BACTERIA": [0, 1, 0], "VIRUS": [0, 0, 1]}
+
+    for label, class_vector in class_labels.items():
+        label_paths = [f"{dir}/{label}/{file}" for file in listdir(f"{dir}/{label}")]
+        paths.extend(label_paths)
+        classes.extend([class_vector] * len(label_paths))
+
     return paths, classes
 
 
