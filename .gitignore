@@ -1,3 +1,4 @@
 /data
 /env
 *.keras
+__pycache__

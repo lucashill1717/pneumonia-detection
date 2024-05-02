@@ -18,7 +18,6 @@ def get_image_paths(dir: str) -> tuple[list[str], ndarray]:
         classes.extend([class_idx] * len(label_paths))
 
     one_hot_labels = eye(num_classes)[classes]
-    
     return paths, one_hot_labels
 
 
@@ -43,8 +42,12 @@ class PneumoniaDataset(PyDataset):
         high = min(low + self.batch_size, len(self.x))
         batch_x = self.x[low:high]
         batch_y = self.y[low:high]
-        return array(
-            [resize(imread(file_name), (320, 320)) for file_name in batch_x]
-        ), batch_y
-
-# 1416, 1736
+        bad_output = [resize(imread(file_name), (1216, 1536)) for file_name in batch_x]
+        good_output = []
+        for output in bad_output:
+            if output.shape == (1216, 1536, 3):
+                new_output = output.mean(axis=2)
+            else:
+                new_output = output
+            good_output.append(new_output)
+        return array(good_output), batch_y
