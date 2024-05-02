@@ -4,14 +4,16 @@ from keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense, Dropout
 from dataset import PneumoniaDataset
 
 
-training_data = image_dataset_from_directory(
-    directory="data/train",
-    image_size=(320, 320),
-    color_mode="grayscale",
-    interpolation="gaussian",
-    label_mode="categorical",
-    verbose=False,
-)
+# training_data = image_dataset_from_directory(
+#     directory="data/train",
+#     image_size=(320, 320),
+#     color_mode="grayscale",
+#     interpolation="gaussian",
+#     label_mode="categorical",
+#     verbose=False,
+# )
+
+training_data = PneumoniaDataset("data/train", 32)
 
 model = Sequential(
     layers=[
