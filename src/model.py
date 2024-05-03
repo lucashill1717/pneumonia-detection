@@ -3,16 +3,16 @@ from keras.models import Sequential
 from keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense, Dropout
 
 
-training_data = PneumoniaDataset("data/train", 32)
+training_data = PneumoniaDataset("data/train", 8)
 
 model = Sequential(
     layers=[
-        Input(shape=(1216, 1536, 1)),
-        Conv2D(64, 3, activation="relu"),
-        Conv2D(64, 3, activation="relu"),
+        Input(shape=(816, 1136, 1)),
+        Conv2D(32, 3, activation="relu"),
+        Conv2D(32, 3, activation="relu"),
         MaxPooling2D(pool_size=(3, 3)),
-        Conv2D(128, 3, activation="relu"),
-        Conv2D(128, 3, activation="relu"),
+        Conv2D(64, 3, activation="relu"),
+        Conv2D(64, 3, activation="relu"),
         Dropout(rate=0.1),
         MaxPooling2D(pool_size=(3, 3)),
         Flatten(),

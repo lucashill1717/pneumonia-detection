@@ -42,10 +42,10 @@ class PneumoniaDataset(PyDataset):
         high = min(low + self.batch_size, len(self.x))
         batch_x = self.x[low:high]
         batch_y = self.y[low:high]
-        bad_output = [resize(imread(file_name), (1216, 1536)) for file_name in batch_x]
+        bad_output = [resize(imread(file_name), (816, 1136)) for file_name in batch_x]
         good_output = []
         for output in bad_output:
-            if output.shape == (1216, 1536, 3):
+            if output.shape == (816, 1136, 3):
                 new_output = output.mean(axis=2)
             else:
                 new_output = output
