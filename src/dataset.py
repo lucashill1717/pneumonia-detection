@@ -7,11 +7,15 @@ from numpy import array, ndarray, eye
 from os import listdir
 
 
+HEIGHT = 512
+WIDTH = 512
+
+
 def get_image_paths(dir: str) -> tuple[list[str], ndarray]:
     paths, classes = [], []
     class_labels = {"NORMAL": 0, "BACTERIA": 1, "VIRUS": 2}
     num_classes = len(class_labels)
-    
+
     for label, class_idx in class_labels.items():
         label_paths = [f"{dir}/{label}/{file}" for file in listdir(f"{dir}/{label}")]
         paths.extend(label_paths)
@@ -42,12 +46,13 @@ class PneumoniaDataset(PyDataset):
         high = min(low + self.batch_size, len(self.x))
         batch_x = self.x[low:high]
         batch_y = self.y[low:high]
-        bad_output = [resize(imread(file_name), (816, 1136)) for file_name in batch_x]
+        bad_output = [
+            resize(imread(file_name), (HEIGHT, WIDTH)) for file_name in batch_x
+        ]
         good_output = []
         for output in bad_output:
-            if output.shape == (816, 1136, 3):
-                new_output = output.mean(axis=2)
-            else:
-                new_output = output
+            new_output = (
+                output.mean(axis=2) if output.shape == (HEIGHT, WIDTH, 3) else output
+            )
             good_output.append(new_output)
         return array(good_output), batch_y
