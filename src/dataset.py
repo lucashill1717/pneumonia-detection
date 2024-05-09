@@ -7,8 +7,8 @@ from numpy import array, ndarray, eye
 from os import listdir
 
 
-HEIGHT = 512
-WIDTH = 512
+HEIGHT = 612
+WIDTH = 712
 
 
 def get_image_paths(dir: str) -> tuple[list[str], ndarray]:

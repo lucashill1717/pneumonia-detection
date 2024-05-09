@@ -1,9 +1,18 @@
 from dataset import PneumoniaDataset, HEIGHT, WIDTH
 from keras.models import Sequential
-from keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense, Dropout, BatchNormalization, Activation
+from keras.layers import (
+    Input,
+    Conv2D,
+    MaxPooling2D,
+    Flatten,
+    Dense,
+    Dropout,
+    BatchNormalization,
+    Activation,
+)
 
 
-training_data = PneumoniaDataset("data/train", 8)
+training_data = PneumoniaDataset("data/train", 4)
 
 model = Sequential(
     layers=[
@@ -22,6 +31,9 @@ model = Sequential(
         BatchNormalization(),
         Activation("relu"),
         MaxPooling2D(3),
+        Conv2D(128, 3),
+        BatchNormalization(),
+        Activation("elu"),
         Conv2D(128, 3),
         BatchNormalization(),
         Activation("relu"),
