@@ -47,7 +47,7 @@ model.compile(
     optimizer="adam", loss="categorical_crossentropy", metrics=["categorical_accuracy"]
 )
 
-model.fit(x=training_data, epochs=100)
+model.fit(x=training_data, epochs=50)
 
 model.save("model0.keras")
 
