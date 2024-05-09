@@ -5,24 +5,11 @@ from skimage.io import imread
 from skimage.transform import resize
 from numpy import array, ndarray, eye
 from os import listdir
+from random import shuffle
 
 
 HEIGHT = 612
 WIDTH = 712
-
-
-def get_image_paths(dir: str) -> tuple[list[str], ndarray]:
-    paths, classes = [], []
-    class_labels = {"NORMAL": 0, "BACTERIA": 1, "VIRUS": 2}
-    num_classes = len(class_labels)
-
-    for label, class_idx in class_labels.items():
-        label_paths = [f"{dir}/{label}/{file}" for file in listdir(f"{dir}/{label}")]
-        paths.extend(label_paths)
-        classes.extend([class_idx] * len(label_paths))
-
-    one_hot_labels = eye(num_classes)[classes]
-    return paths, one_hot_labels
 
 
 class PneumoniaDataset(PyDataset):
@@ -35,8 +22,9 @@ class PneumoniaDataset(PyDataset):
         self: "PneumoniaDataset", dir: str, batch_size: int, **kwargs: Any
     ) -> None:
         super().__init__(**kwargs)
-        self.x, self.y = get_image_paths(dir)
+        self.x, self.y = self.get_image_paths(dir)
         self.batch_size = batch_size
+        self.shuffle = shuffle
 
     def __len__(self: "PneumoniaDataset") -> int:
         return ceil(len(self.x) / self.batch_size)
@@ -56,3 +44,25 @@ class PneumoniaDataset(PyDataset):
             )
             good_output.append(new_output)
         return array(good_output), batch_y
+
+    def on_epoch_end(self: "PneumoniaDataset") -> None:
+        if shuffle:
+            indices = list(range(len(self.x)))
+            shuffle(indices)
+            self.x = [self.x[i] for i in indices]
+            self.y = self.y[indices]
+
+    def get_image_paths(self, dir: str) -> tuple[list[str], ndarray]:
+        paths, classes = [], []
+        class_labels = {"NORMAL": 0, "BACTERIA": 1, "VIRUS": 2}
+        num_classes = len(class_labels)
+
+        for label, class_idx in class_labels.items():
+            label_paths = [
+                f"{dir}/{label}/{file}" for file in listdir(f"{dir}/{label}")
+            ]
+            paths.extend(label_paths)
+            classes.extend([class_idx] * len(label_paths))
+
+        one_hot_labels = eye(num_classes)[classes]
+        return paths, one_hot_labels

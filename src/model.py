@@ -24,6 +24,7 @@ model = Sequential(
         BatchNormalization(),
         Activation("relu"),
         MaxPooling2D(2),
+        Dropout(0.1),
         Conv2D(64, 3),
         BatchNormalization(),
         Activation("elu"),
@@ -31,6 +32,7 @@ model = Sequential(
         BatchNormalization(),
         Activation("relu"),
         MaxPooling2D(3),
+        Dropout(0.1),
         Conv2D(128, 3),
         BatchNormalization(),
         Activation("elu"),
@@ -40,6 +42,7 @@ model = Sequential(
         Dropout(0.1),
         Flatten(),
         Dense(3, activation="softmax"),
+        # global pooling and sigmoid activation?
     ]
 )
 
@@ -47,7 +50,7 @@ model.compile(
     optimizer="adam", loss="categorical_crossentropy", metrics=["categorical_accuracy"]
 )
 
-model.fit(x=training_data, epochs=50)
+model.fit(x=training_data, epochs=100)
 
 model.save("model0.keras")
 
