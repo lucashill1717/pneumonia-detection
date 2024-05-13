@@ -8,8 +8,8 @@ from os import listdir
 from random import shuffle
 
 
-HEIGHT = 612
-WIDTH = 712
+HEIGHT = 512
+WIDTH = 512
 
 
 class PneumoniaDataset(PyDataset):
@@ -24,7 +24,6 @@ class PneumoniaDataset(PyDataset):
         super().__init__(**kwargs)
         self.x, self.y = self.get_image_paths(dir)
         self.batch_size = batch_size
-        self.shuffle = shuffle
 
     def __len__(self: "PneumoniaDataset") -> int:
         return ceil(len(self.x) / self.batch_size)
@@ -46,11 +45,10 @@ class PneumoniaDataset(PyDataset):
         return array(good_output), batch_y
 
     def on_epoch_end(self: "PneumoniaDataset") -> None:
-        if shuffle:
-            indices = list(range(len(self.x)))
-            shuffle(indices)
-            self.x = [self.x[i] for i in indices]
-            self.y = self.y[indices]
+        indices = list(range(len(self.x)))
+        shuffle(indices)
+        self.x = [self.x[i] for i in indices]
+        self.y = self.y[indices]
 
     def get_image_paths(self, dir: str) -> tuple[list[str], ndarray]:
         paths, classes = [], []
