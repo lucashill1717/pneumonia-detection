@@ -43,7 +43,7 @@ model = Sequential(
 model.compile(
     optimizer="adam", loss="categorical_crossentropy", metrics=["categorical_accuracy"]
 )
-# model.summary();exit()
+
 model.fit(x=training_data, epochs=100)
 
 model.save("model1.keras")

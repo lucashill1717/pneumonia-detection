@@ -13,11 +13,6 @@ WIDTH = 512
 
 
 class PneumoniaDataset(PyDataset):
-    """
-    Dataset class specifically tailored to the Pneumonia Detection dataset from Kaggle.
-    Utilizes a Keras PyDataset class, allowing a generator to be used to avoid memory issues.
-    """
-
     def __init__(
         self: "PneumoniaDataset", dir: str, batch_size: int, **kwargs: Any
     ) -> None:
